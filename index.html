@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demina | Data Analyst &amp; Machine Learning</title>
+  <meta name="description" content="Informatics graduate from Universitas Diponegoro focused on data analysis and machine learning.">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:title" content="Demina | Data Analyst &amp; Machine Learning">
+  <meta property="og:description" content="Work experience and selected projects in data analysis, machine learning, and web systems.">
+  <meta property="og:type" content="website">
+  <!-- Favicon cadangan; render.js menggambar ulang pakai font script yang sama dengan logo header -->
+  <link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='50' font-family='Georgia,serif' font-style='italic' font-size='56' text-anchor='middle' fill='%23ff3d9a'%3ED%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Pinyon+Script&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="#top" aria-label="Back to top"><span aria-hidden="true">D</span></a>
+      <nav aria-label="Primary"><ul id="nav" class="nav"></ul></nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap mode-row">
+      <div class="mode" role="group" aria-labelledby="mode-label">
+        <span class="mode-label" id="mode-label">Choose mode</span>
+        <button type="button" data-mode="pro" aria-pressed="true">Professional</button>
+        <button type="button" data-mode="casual" aria-pressed="false">Casual</button>
+      </div>
+      <p class="updated" id="last-updated"></p>
+    </div>
+
+    <section id="top" class="hero">
+      <div class="wrap hero-grid">
+        <div class="panel profile">
+          <div class="photo" id="photo"></div>
+          <div>
+            <p class="eyebrow" id="hero-role"></p>
+            <h1 id="hero-name"></h1>
+            <ul id="hero-lines" class="lines"></ul>
+          </div>
+        </div>
+        <div id="about" class="panel about">
+          <h2 id="about-heading" class="label"></h2>
+          <div id="about-body" class="prose"></div>
+          <ul id="about-highlights" class="highlights"></ul>
+          <ul id="about-skills" class="tags"></ul>
+          <div class="cta" id="hero-cta"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="work-heading"></h2>
+          <div class="arrows">
+            <button type="button" data-rail="work-list" data-dir="-1" aria-label="Previous">&larr;</button>
+            <button type="button" data-rail="work-list" data-dir="1" aria-label="Next">&rarr;</button>
+          </div>
+        </div>
+        <div id="work-list" class="rail" tabindex="0"></div>
+      </div>
+    </section>
+
+    <section id="projects" class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="projects-heading"></h2>
+          <div class="arrows">
+            <button type="button" data-rail="projects-list" data-dir="-1" aria-label="Previous">&larr;</button>
+            <button type="button" data-rail="projects-list" data-dir="1" aria-label="Next">&rarr;</button>
+          </div>
+        </div>
+        <div id="project-tabs" class="tabs" role="tablist"></div>
+        <div id="projects-list" class="rail" role="tabpanel" tabindex="0"></div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <div class="wrap">
+        <h2 id="contact-heading"></h2>
+        <p id="contact-text" class="contact-text"></p>
+        <ul id="contact-links" class="contact-links"></ul>
+      </div>
+    </section>
+
+    <section id="soon" class="section soon-page" aria-live="polite">
+      <div class="wrap">
+        <p class="eyebrow" id="soon-tag"></p>
+        <h2 id="soon-title"></h2>
+        <p id="soon-text" class="contact-text"></p>
+      </div>
+    </section>
+
+    <noscript>
+      <div class="wrap"><p class="prose">This portfolio needs JavaScript to display its content.</p></div>
+    </noscript>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><p id="footer-text"></p></div>
+  </footer>
+
+  <script src="assets/data/content.pro.js"></script>
+  <script src="assets/data/content.casual.js"></script>
+  <script src="assets/js/render.js"></script>
+</body>
+</html>
