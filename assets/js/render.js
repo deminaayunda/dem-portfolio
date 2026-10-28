@@ -235,6 +235,22 @@
     document.fonts.load('50px "Pinyon Script"').then(function (f) { if (f.length) drawFavicon(); }, function () {});
   }
 
+  // Menu hamburger (mobile): buka/tutup, tutup lagi saat link dipilih, klik di luar, atau tekan Esc
+  var header = document.querySelector(".site-header");
+  var menuBtn = $("menu-btn");
+  function setMenu(open) {
+    header.classList.toggle("open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  }
+  menuBtn.addEventListener("click", function () { setMenu(!header.classList.contains("open")); });
+  $("nav").addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("click", function (e) { if (!header.contains(e.target)) setMenu(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && header.classList.contains("open")) { setMenu(false); menuBtn.focus(); }
+  });
+  window.matchMedia("(min-width: 641px)").addEventListener("change", function (m) { if (m.matches) setMenu(false); });
+
   render(PRO);
   var saved = "pro";
   try { saved = localStorage.getItem(MODE_KEY) || "pro"; } catch (e) { /* abaikan */ }

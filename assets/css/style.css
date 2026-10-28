@@ -67,9 +67,6 @@ mark {
   min-height: 56px; padding: 8px 10px 8px 9px;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28));
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.75);
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 0.95),
@@ -80,6 +77,16 @@ mark {
 }
 /* Tanpa ini, menu yang bisa di-scroll di mobile mendorong lebar halaman */
 .site-header nav { min-width: 0; }
+/* Kaca blur ditaruh di pseudo-element, bukan di .bar: kalau .bar sendiri pakai backdrop-filter,
+   dropdown menu mobile (anaknya) tidak bisa ikut nge-blur isi halaman */
+.site-header .bar::after,
+.site-header nav::after {
+  content: ""; position: absolute; inset: 0; z-index: -2; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28));
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+}
+@media (min-width: 641px) { .site-header nav::after { display: none; } }
 /* Kilau di bagian atas kaca */
 .site-header .bar::before {
   content: ""; position: absolute; inset: 1px 1px 50% 1px; z-index: -1;
@@ -88,7 +95,7 @@ mark {
   pointer-events: none;
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header .bar { background: rgba(255, 255, 255, 0.94); }
+  .site-header .bar::after, .site-header nav::after { background: rgba(255, 255, 255, 0.96); }
 }
 /* Logo: huruf D script pink chrome tanpa latar (sama dengan favicon) */
 /* drop-shadow ditaruh di <a>, bukan di span: filter + background-clip:text di elemen yang sama bikin huruf jadi kotak di Safari */
@@ -127,6 +134,19 @@ mark {
   }
 }
 .nav a:active { color: var(--ink); background: rgba(255, 255, 255, 0.85); }
+
+/* Tombol hamburger: hanya muncul di layar kecil */
+.menu-btn {
+  display: none; flex: none; width: 42px; height: 42px; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  place-content: center; gap: 4px;
+}
+.menu-btn span { display: block; width: 18px; height: 2px; border-radius: 2px; background: var(--ink); transition: transform .25s, opacity .2s; }
+.menu-btn:active { background: rgba(255, 255, 255, 0.85); }
+.site-header.open .menu-btn span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.site-header.open .menu-btn span:nth-child(2) { opacity: 0; }
+.site-header.open .menu-btn span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.is-casual .menu-btn { display: none !important; }
 
 /* Mode toggle */
 .mode-row { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 28px; }
@@ -279,17 +299,21 @@ h2 {
 
 @media (max-width: 640px) {
   .site-header { padding-top: 8px; }
-  .site-header .bar { gap: 6px; min-height: 52px; padding: 6px; }
-  .nav {
-    flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none;
-    overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
-    /* pudar di ujung kanan: tanda menu masih bisa digeser */
-    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
-    mask-image: linear-gradient(90deg, #000 85%, transparent);
-    padding-right: 24px;
+  .site-header .bar { min-height: 52px; padding: 5px 5px 5px 4px; }
+  .menu-btn { display: grid; }
+  /* Menu jadi dropdown kaca di bawah pil, terbuka lewat tombol hamburger */
+  .site-header nav {
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0; isolation: isolate;
+    border-radius: 24px; padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95), 0 0 0 0.5px rgba(0, 0, 0, 0.1), 0 16px 40px -12px rgba(0, 0, 0, 0.25);
+    opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top center;
+    transition: opacity .2s, transform .25s, visibility 0s .25s;
   }
-  .nav::-webkit-scrollbar { display: none; }
-  .nav a { white-space: nowrap; padding: 7px 10px; font-size: 0.85rem; }
+  .site-header.open nav { opacity: 1; visibility: visible; transform: none; transition: opacity .2s, transform .25s, visibility 0s; }
+  .nav { flex-direction: column; gap: 2px; }
+  .nav a { padding: 13px 16px; font-size: 1rem; border-radius: 16px; }
+  @media (prefers-reduced-motion: reduce) { .site-header nav, .menu-btn span { transition: none; } }
   .profile { flex-direction: column; align-items: flex-start; }
   .mode-label { display: none; }
   .arrows { display: none; }
