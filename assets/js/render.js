@@ -186,11 +186,7 @@
     document.body.classList.toggle("is-casual", casual);
     document.documentElement.lang = (casual ? CASUAL : PRO).lang || "en";
     $("mode-label").textContent = (casual ? CASUAL : PRO).modeLabel;
-    if (casual) {
-      $("soon-tag").textContent = CASUAL.soon.tag;
-      rich(clear("soon-title"), CASUAL.soon.title);
-      $("soon-text").textContent = CASUAL.soon.text;
-    }
+    if (casual) rich(clear("soon-title"), CASUAL.soon.title);
     document.querySelectorAll("[data-mode]").forEach(function (b) {
       b.setAttribute("aria-pressed", String(b.getAttribute("data-mode") === mode));
     });

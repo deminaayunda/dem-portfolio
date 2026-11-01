@@ -21,7 +21,7 @@ window.CONTENT = {
 
   modeLabel: "Choose mode",
   // Ganti tanggal ini tiap kali update isi situs
-  lastUpdated: { label: "Last updated", date: "2026-10-28" },
+  lastUpdated: { label: "Last updated", date: "2026-11-01" },
 
   hero: {
     name: "Demina Ayunda Chesara, S.Kom",
@@ -34,8 +34,8 @@ window.CONTENT = {
   about: {
     heading: "About",
     paragraphs: [
-      "I find the *root cause* of a problem, define the rules that fix it, and check the result against data.",
-      "I've applied this to a sorting bottleneck at Prodia, a booking rule gap at BPJS Ketenagakerjaan, and a machine learning thesis that compared 16 scenarios.",
+      "I'm looking for data and analytics roles where I can find the *root cause* of a problem, fix it, and check the result against data.",
+      "At Prodia, this cut file sorting from about 120 to 60 minutes per batch. At BPJS Ketenagakerjaan, I found and blocked a booking rule gap. In my thesis, comparing 16 method combinations raised balanced accuracy by 12.3%.",
     ],
     highlights: [
       "Cum laude, Universitas Diponegoro (2026)",

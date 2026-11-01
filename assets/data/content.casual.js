@@ -4,12 +4,10 @@
   dan yang tampil cuma halaman di bawah ini.
 */
 window.CONTENT_CASUAL = {
-  lang: "id",
-  modeLabel: "Pilih mode",
+  lang: "en",
+  modeLabel: "Choose mode",
 
   soon: {
-    tag: "Creative & art",
     title: "Coming *soon*",
-    text: "Sisi kreatif dan karya art aku lagi disiapin. Tungguin ya!",
   },
 };
