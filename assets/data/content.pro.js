@@ -1,5 +1,5 @@
 /*
-  KONTEN VERSI PROFESIONAL
+  KONTEN SITUS
   Semua teks di situs diambil dari file ini. Edit di sini, jangan di index.html.
   Aturan: field yang dikosongkan ("" atau []) otomatis tidak ditampilkan.
   Tulis *kata* untuk highlight kuning (butter).
@@ -19,7 +19,6 @@ window.CONTENT = {
     { label: "Contacts", href: "#contact" },
   ],
 
-  modeLabel: "Choose mode",
   // Ganti tanggal ini tiap kali update isi situs
   lastUpdated: { label: "Last updated", date: "2026-11-01" },
 

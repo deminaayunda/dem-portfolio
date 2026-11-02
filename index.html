@@ -30,12 +30,7 @@
   </header>
 
   <main id="main">
-    <div class="wrap mode-row">
-      <div class="mode" role="group" aria-labelledby="mode-label">
-        <span class="mode-label" id="mode-label">Choose mode</span>
-        <button type="button" data-mode="pro" aria-pressed="true">Professional</button>
-        <button type="button" data-mode="casual" aria-pressed="false">Casual</button>
-      </div>
+    <div class="wrap updated-row">
       <p class="updated" id="last-updated"></p>
     </div>
 
@@ -76,13 +71,9 @@
       <div class="wrap">
         <div class="section-head">
           <h2 id="projects-heading"></h2>
-          <div class="arrows">
-            <button type="button" data-rail="projects-list" data-dir="-1" aria-label="Previous">&larr;</button>
-            <button type="button" data-rail="projects-list" data-dir="1" aria-label="Next">&rarr;</button>
-          </div>
         </div>
         <div id="project-tabs" class="tabs" role="tablist"></div>
-        <div id="projects-list" class="rail" role="tabpanel" tabindex="0"></div>
+        <div id="projects-list" class="stack" role="tabpanel" tabindex="0"></div>
       </div>
     </section>
 
@@ -91,12 +82,6 @@
         <h2 id="contact-heading"></h2>
         <p id="contact-text" class="contact-text"></p>
         <ul id="contact-links" class="contact-links"></ul>
-      </div>
-    </section>
-
-    <section id="soon" class="section soon-page" aria-live="polite">
-      <div class="wrap">
-        <h2 id="soon-title"></h2>
       </div>
     </section>
 
@@ -110,7 +95,6 @@
   </footer>
 
   <script src="assets/data/content.pro.js"></script>
-  <script src="assets/data/content.casual.js"></script>
   <script src="assets/js/render.js"></script>
 </body>
 </html>

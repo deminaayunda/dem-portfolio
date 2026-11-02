@@ -1,11 +1,8 @@
-/* Mengisi halaman dari window.CONTENT; mode casual (CONTENT_CASUAL) sementara cuma halaman coming soon. Semua teks lewat textContent, tidak ada innerHTML dari data. */
+/* Mengisi halaman dari window.CONTENT. Semua teks lewat textContent, tidak ada innerHTML dari data. */
 (function () {
   "use strict";
-  var PRO = window.CONTENT;
-  var CASUAL = window.CONTENT_CASUAL;
-  if (!PRO) return;
-  var MODE_KEY = "porto-mode";
-  var mode = "pro";
+  var CONTENT = window.CONTENT;
+  if (!CONTENT) return;
   var activeTab = null;
 
   function $(id) { return document.getElementById(id); }
@@ -66,7 +63,6 @@
     });
 
     var list = clear("projects-list");
-    list.scrollLeft = 0;
     var tab = P.tabs.filter(function (t) { return t.id === activeTab; })[0];
 
     tab.items.forEach(function (p) {
@@ -89,7 +85,7 @@
       list.appendChild(card);
     });
 
-    // Kartu "coming soon" di ujung carousel, kecuali tab-nya pakai comingSoon: false
+    // Kartu "coming soon" di ujung daftar, kecuali tab-nya pakai comingSoon: false
     if (P.comingSoon && tab.comingSoon !== false) {
       list.appendChild(el("article", { cls: "card soon" }, [
         el("span", { cls: "plus", text: "+", attrs: { "aria-hidden": "true" } }),
@@ -106,8 +102,7 @@
     var md = document.querySelector('meta[name="description"]');
     if (md) md.setAttribute("content", C.meta.description);
 
-    // Header + mode
-    $("mode-label").textContent = C.modeLabel;
+    // Header
     var upd = C.lastUpdated;
     if (upd && upd.date) {
       var d = new Date(upd.date + "T00:00:00");
@@ -180,23 +175,6 @@
     $("footer-text").textContent = C.footer;
   }
 
-  function setMode(next) {
-    mode = next === "casual" && CASUAL ? "casual" : "pro";
-    var casual = mode === "casual";
-    document.body.classList.toggle("is-casual", casual);
-    document.documentElement.lang = (casual ? CASUAL : PRO).lang || "en";
-    $("mode-label").textContent = (casual ? CASUAL : PRO).modeLabel;
-    if (casual) rich(clear("soon-title"), CASUAL.soon.title);
-    document.querySelectorAll("[data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(b.getAttribute("data-mode") === mode));
-    });
-    try { localStorage.setItem(MODE_KEY, mode); } catch (e) { /* storage diblokir: abaikan */ }
-  }
-
-  document.querySelectorAll("[data-mode]").forEach(function (b) {
-    b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
-  });
-
   // Tombol panah carousel
   document.querySelectorAll("[data-rail]").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -247,8 +225,5 @@
   });
   window.matchMedia("(min-width: 641px)").addEventListener("change", function (m) { if (m.matches) setMenu(false); });
 
-  render(PRO);
-  var saved = "pro";
-  try { saved = localStorage.getItem(MODE_KEY) || "pro"; } catch (e) { /* abaikan */ }
-  setMode(saved);
+  render(CONTENT);
 })();
