@@ -35,21 +35,17 @@
     </div>
 
     <section id="top" class="hero">
-      <div class="wrap hero-grid">
-        <div class="panel profile">
-          <div class="photo" id="photo"></div>
-          <div>
-            <p class="eyebrow" id="hero-role"></p>
-            <h1 id="hero-name"></h1>
-            <ul id="hero-lines" class="lines"></ul>
+      <div class="wrap">
+        <div id="about" class="panel profile">
+          <div class="profile-head">
+            <div class="photo" id="photo"></div>
+            <div>
+              <p class="eyebrow" id="hero-role"></p>
+              <h1 id="hero-name"></h1>
+              <ul id="hero-lines" class="lines"></ul>
+            </div>
           </div>
-        </div>
-        <div id="about" class="panel about">
-          <h2 id="about-heading" class="label"></h2>
-          <div id="about-body" class="prose"></div>
-          <ul id="about-highlights" class="highlights"></ul>
-          <ul id="about-skills" class="tags"></ul>
-          <div class="cta" id="hero-cta"></div>
+          <div id="about-facts" class="facts"></div>
         </div>
       </div>
     </section>
@@ -93,6 +89,11 @@
   <footer class="site-footer">
     <div class="wrap"><p id="footer-text"></p></div>
   </footer>
+
+  <dialog id="detail" class="detail" aria-labelledby="detail-title">
+    <button type="button" class="detail-close" id="detail-close" aria-label="Close">&times;</button>
+    <div id="detail-body"></div>
+  </dialog>
 
   <script src="assets/data/content.pro.js"></script>
   <script src="assets/js/render.js"></script>

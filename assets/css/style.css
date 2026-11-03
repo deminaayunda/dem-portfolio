@@ -153,14 +153,22 @@ mark {
 .updated:empty { display: none; }
 .updated::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); margin-right: 7px; vertical-align: 1px; }
 
-/* Hero: profile + about */
-.hero { padding: 28px 0 clamp(48px, 8vw, 80px); }
-.hero-grid { display: grid; gap: 20px; }
+/* Hero: satu kartu profil (foto + nama, lalu skills / pencapaian / sertifikat) */
+.hero { padding: 28px 0 clamp(40px, 6vw, 64px); }
 .panel { border: var(--border); border-radius: var(--radius); background: var(--bg); padding: clamp(22px, 4vw, 40px); }
-.profile { display: flex; align-items: center; gap: clamp(20px, 4vw, 40px); }
+.profile-head { display: flex; align-items: center; gap: clamp(20px, 4vw, 36px); }
+.facts { display: grid; gap: 22px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--hair); }
+.facts:empty { display: none; }
+.facts .label { margin-bottom: 10px; }
+/* Tiga kolom; grup ke-4 (Certifications) jadi baris penuh di bawahnya, isinya juga tiga kolom sejajar */
+@media (min-width: 760px) {
+  .facts { grid-template-columns: 1.2fr 1fr 1fr; gap: 24px 32px; }
+  .facts > :nth-child(n+4) { grid-column: 1 / -1; }
+  .facts > :nth-child(n+4) .highlights { grid-template-columns: 1.2fr 1fr 1fr; gap: 6px 32px; }
+}
 /* Frame foto 4:5 dengan bayangan lilac; inisial tampil kalau foto belum ada */
 .photo {
-  position: relative; flex: none; width: clamp(150px, 26vw, 220px); aspect-ratio: 4 / 5;
+  position: relative; flex: none; width: clamp(120px, 20vw, 170px); aspect-ratio: 4 / 5;
   border: var(--border); border-radius: var(--radius); overflow: hidden;
   background: var(--butter); display: grid; place-items: center;
   box-shadow: 7px 7px 0 var(--lilac);
@@ -179,17 +187,10 @@ mark {
 .label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); margin: 0 0 14px; font-family: var(--font-body); }
 .prose p { margin: 0 0 0.8em; font-size: 1.08rem; max-width: 62ch; }
 .prose p:last-child { margin-bottom: 0; }
-.about .tags { margin-top: 20px; }
-.highlights { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.95rem; color: var(--ink-soft); }
+.highlights { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 0.95rem; color: var(--ink-soft); }
 .highlights:empty { display: none; }
 .highlights li { display: flex; gap: 10px; align-items: baseline; }
 .highlights li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--pink); transform: translateY(-1px); }
-.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.cta:empty { display: none; }
-
-@media (min-width: 900px) {
-  .hero-grid { grid-template-columns: 1.15fr 1fr; align-items: stretch; }
-}
 
 .btn {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px;
@@ -253,21 +254,49 @@ h2 {
   padding: 22px; transition: transform .15s, box-shadow .15s;
 }
 .card:hover { transform: translate(-3px, -3px); box-shadow: 5px 5px 0 var(--ink); }
+.card .logo { display: block; height: 40px; width: auto; max-width: 170px; object-fit: contain; border-radius: 6px; margin-bottom: 14px; align-self: flex-start; }
 .card .dot { width: 14px; height: 14px; border-radius: 50%; border: var(--border); margin-bottom: 14px; }
 .card:nth-child(3n+1) .dot { background: var(--butter); }
 .card:nth-child(3n+2) .dot { background: var(--lilac); }
 .card:nth-child(3n+3) .dot { background: var(--pink); }
-.card .kind { margin: 0 0 4px; font-size: 0.8rem; font-weight: 600; color: var(--ink-mute); }
-.card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; line-height: 1.25; margin: 0 0 12px; }
-.card p { margin: 0 0 12px; color: var(--ink-soft); }
-.card .sub { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); margin: 4px 0 6px; }
-.card ul.points { margin: 0 0 12px; padding-left: 1.1em; color: var(--ink-soft); }
-.card ul.points li { margin-bottom: 6px; }
-.card ul.points li::marker { color: var(--pink); }
-.card details { margin: 0 0 12px; color: var(--ink-soft); }
-.card summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 0.9rem; }
-.card details p { margin-top: 8px; }
+.card .kind, .detail .kind { margin: 0 0 4px; font-size: 0.8rem; font-weight: 600; color: var(--ink-mute); }
+.card h3, .detail h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; line-height: 1.25; margin: 0 0 12px; }
+.card p, .detail p { margin: 0 0 12px; color: var(--ink-soft); }
+.card .sub, .detail .sub { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); margin: 4px 0 6px; }
+.card ul.points, .detail ul.points { margin: 0 0 12px; padding-left: 1.1em; color: var(--ink-soft); }
+.card ul.points li, .detail ul.points li { margin-bottom: 6px; }
+.card ul.points li::marker, .detail ul.points li::marker { color: var(--pink); }
 .card .tags { margin-top: auto; padding-top: 8px; }
+.detail .tags { padding-top: 8px; }
+
+/* Gambar kartu projek dan foto organisasi; kartu projek: gambar + judul + tombol detail */
+.thumb {
+  position: relative; aspect-ratio: 16 / 10; margin-bottom: 14px;
+  border: var(--border); border-radius: 12px; overflow: hidden; background: var(--butter);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 2.6rem;
+}
+.thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.card:nth-child(3n+2) .thumb { background: var(--lilac); }
+.card:nth-child(3n+3) .thumb { background: var(--pink); }
+.card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.card-actions .btn { font-family: inherit; cursor: pointer; }
+
+/* Popup detail projek */
+html:has(.detail[open]) { overflow: hidden; scrollbar-gutter: stable; }
+.detail {
+  width: min(640px, calc(100% - 2 * var(--gutter))); padding: 0; margin: auto; overflow: hidden;
+  border: var(--border); border-radius: var(--radius); background: var(--bg); color: var(--ink);
+}
+.detail::backdrop { background: rgba(10, 10, 10, 0.55); }
+#detail-body { max-height: 85vh; overflow-y: auto; overscroll-behavior: contain; padding: 28px; }
+#detail-body .kind, #detail-body h3 { padding-right: 44px; }
+.detail-close {
+  position: absolute; top: 12px; right: 22px; z-index: 1;
+  width: 40px; height: 40px; border-radius: 50%; border: var(--border); background: var(--bg);
+  font-size: 1.3rem; line-height: 1; color: var(--ink); cursor: pointer;
+}
+.detail-close:hover { background: var(--butter); }
 
 .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0; }
 .tags li { border: 1px solid var(--ink); font-size: 0.78rem; font-weight: 500; padding: 2px 10px; border-radius: 999px; }
@@ -284,6 +313,7 @@ h2 {
 .site-footer p { margin: 0; }
 
 @media (max-width: 640px) {
+  .profile-head { flex-direction: column; align-items: flex-start; }
   .site-header { padding-top: 8px; }
   .site-header .bar { min-height: 52px; padding: 5px 5px 5px 4px; }
   .menu-btn { display: grid; }
@@ -300,10 +330,9 @@ h2 {
   .nav { flex-direction: column; gap: 2px; }
   .nav a { padding: 13px 16px; font-size: 1rem; border-radius: 16px; }
   @media (prefers-reduced-motion: reduce) { .site-header nav, .menu-btn span { transition: none; } }
-  .profile { flex-direction: column; align-items: flex-start; }
   .arrows { display: none; }
 }
 @media print {
-  .site-header, .skip, .cta, .updated-row, .arrows, .tabs { display: none; }
+  .site-header, .skip, .updated-row, .arrows, .tabs { display: none; }
   .rail { grid-auto-flow: row; grid-auto-columns: auto; overflow: visible; }
 }

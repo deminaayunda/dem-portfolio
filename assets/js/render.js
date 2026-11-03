@@ -48,6 +48,61 @@
     return ul;
   }
 
+  // Kotak gambar hanya untuk item yang punya field image (boleh kosong).
+  // Huruf pertama judul selalu ada di belakang; gambar menutupinya, dan dihapus kalau file-nya belum ada
+  function thumb(p) {
+    if (!("image" in p)) return null;
+    var box = el("div", { cls: "thumb" }, [el("span", { text: (p.title || p.org).charAt(0), attrs: { "aria-hidden": "true" } })]);
+    if (p.image) {
+      var img = el("img", { attrs: { src: p.image, alt: "" } });
+      img.addEventListener("error", function () { img.remove(); });
+      box.appendChild(img);
+    }
+    return box;
+  }
+
+  function liveLinks(p) { return (p.links || []).filter(function (l) { return l.href; }); }
+
+  // Isi lengkap satu item: dipakai popup detail dan kartu tab yang tidak pakai popup.
+  // Di popup, link tidak ikut karena sudah jadi tombol di kartunya.
+  function fullInfo(p, tab, P, noLinks) {
+    var links = noLinks ? [] : liveLinks(p);
+    var ll = null;
+    if (links.length) {
+      ll = el("ul", { cls: "card-links" });
+      links.forEach(function (l) { ll.appendChild(el("li", {}, [link(l)])); });
+    }
+    return [
+      p.kind ? el("p", { cls: "kind", text: p.kind }) : null,
+      el("h3", { text: p.title }),
+      p.summary ? rich(el("p"), p.summary) : null,
+      p.approach ? el("p", { cls: "sub", text: P.howLabel }) : null,
+      p.approach ? el("p", { text: p.approach }) : null,
+      p.results && p.results.length ? el("p", { cls: "sub", text: tab.resultLabel || P.resultLabel }) : null,
+      points(p.results),
+      tags(p.stack, "Tools and methods"),
+      ll,
+    ];
+  }
+
+  function dot() { return el("span", { cls: "dot", attrs: { "aria-hidden": "true" } }); }
+
+  // Logo kecil di kartu pengalaman kerja; kalau file-nya tidak ada, kembali ke bulatan warna
+  function logo(j) {
+    if (!j.logo) return null;
+    var img = el("img", { cls: "logo", attrs: { src: j.logo, alt: j.org } });
+    img.addEventListener("error", function () { img.replaceWith(dot()); });
+    return img;
+  }
+
+  function openDetail(p, tab, P) {
+    var body = clear("detail-body");
+    [p.image ? thumb(p) : null].concat(fullInfo(p, tab, P, true)).forEach(function (n) { if (n) body.appendChild(n); });
+    body.querySelector("h3").id = "detail-title";
+    $("detail").showModal();
+    body.scrollTop = 0;
+  }
+
   function renderProjects(C) {
     var P = C.projects;
     if (!P.tabs.some(function (t) { return t.id === activeTab; })) activeTab = P.tabs[0].id;
@@ -66,23 +121,16 @@
     var tab = P.tabs.filter(function (t) { return t.id === activeTab; })[0];
 
     tab.items.forEach(function (p) {
-      var card = el("article", { cls: "card" }, [
-        el("span", { cls: "dot", attrs: { "aria-hidden": "true" } }),
-        p.kind ? el("p", { cls: "kind", text: p.kind }) : null,
-        el("h3", { text: p.title }),
-        p.summary ? rich(el("p"), p.summary) : null,
-        p.approach ? el("details", {}, [el("summary", { text: P.howLabel }), el("p", { text: p.approach })]) : null,
-        p.results && p.results.length ? el("p", { cls: "sub", text: tab.resultLabel || P.resultLabel }) : null,
-        points(p.results),
-        tags(p.stack, "Tools and methods"),
-      ]);
-      var links = (p.links || []).filter(function (l) { return l.href; });
-      if (links.length) {
-        var ll = el("ul", { cls: "card-links" });
-        links.forEach(function (l) { ll.appendChild(el("li", {}, [link(l)])); });
-        card.appendChild(ll);
+      if (!tab.popup) {
+        list.appendChild(el("article", { cls: "card" }, [thumb(p) || dot()].concat(fullInfo(p, tab, P))));
+        return;
       }
-      list.appendChild(card);
+      var more = el("button", { cls: "btn", text: P.detailLabel, attrs: { type: "button", "aria-haspopup": "dialog", "aria-label": P.detailLabel + ": " + p.title } });
+      more.addEventListener("click", function () { openDetail(p, tab, P); });
+      // Tombol Detail + link projek (mis. coba website-nya) langsung di kartu
+      var actions = el("div", { cls: "card-actions" }, [more]);
+      liveLinks(p).forEach(function (l) { actions.appendChild(link(l, "btn primary")); });
+      list.appendChild(el("article", { cls: "card project" }, [thumb(p), el("h3", { text: p.title }), actions]));
     });
 
     // Kartu "coming soon" di ujung daftar, kecuali tab-nya pakai comingSoon: false
@@ -130,22 +178,20 @@
     C.hero.lines.forEach(function (l) { lines.appendChild(el("li", { text: l })); });
 
     // About
-    $("about-heading").textContent = C.about.heading;
-    var about = clear("about-body");
-    C.about.paragraphs.forEach(function (p) { about.appendChild(rich(el("p"), p)); });
-    var hl = clear("about-highlights");
-    (C.about.highlights || []).forEach(function (h) { hl.appendChild(el("li", { text: h })); });
-    var skills = clear("about-skills");
-    (C.about.skills || []).forEach(function (s) { skills.appendChild(el("li", { text: s })); });
-    var cta = clear("hero-cta");
-    (C.about.cta || []).forEach(function (b) { cta.appendChild(link(b, "btn" + (b.primary ? " primary" : ""))); });
+    var facts = clear("about-facts");
+    C.about.forEach(function (g) {
+      if (!g.items || !g.items.length) return;
+      var ul = el("ul", { cls: g.tags ? "tags" : "highlights" });
+      g.items.forEach(function (t) { ul.appendChild(el("li", { text: t })); });
+      facts.appendChild(el("div", {}, [el("h2", { cls: "label", text: g.label }), ul]));
+    });
 
     // Work experience
     $("work-heading").textContent = C.work.heading;
     var work = clear("work-list");
     C.work.items.forEach(function (j) {
       work.appendChild(el("article", { cls: "card" }, [
-        el("span", { cls: "dot", attrs: { "aria-hidden": "true" } }),
+        logo(j) || dot(),
         el("p", { cls: "kind", text: j.org + (j.period ? " · " + j.period : "") }),
         el("h3", { text: j.role }),
         j.summary ? rich(el("p"), j.summary) : null,
@@ -174,6 +220,10 @@
     // Footer
     $("footer-text").textContent = C.footer;
   }
+
+  // Popup detail projek: tutup lewat tombol X, klik di luar kotak, atau Esc (bawaan <dialog>)
+  $("detail-close").addEventListener("click", function () { $("detail").close(); });
+  $("detail").addEventListener("click", function (e) { if (e.target === $("detail")) $("detail").close(); });
 
   // Tombol panah carousel
   document.querySelectorAll("[data-rail]").forEach(function (b) {
